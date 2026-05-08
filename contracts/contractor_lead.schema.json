@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ContractorLead",
+  "description": "Single contractor business in the acquisition pipeline.",
+  "type": "object",
+  "required": [
+    "correlation_id",
+    "business_name",
+    "trade",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "correlation_id": {
+      "type": "string",
+      "description": "UUID for tracing this lead through the pipeline.",
+      "pattern": "^lead-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "place_id": {
+      "type": ["string", "null"],
+      "description": "Google Maps place_id; primary dedup key when present."
+    },
+    "business_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "trade": {
+      "type": "string",
+      "description": "Trade category; one of TRADE_QUERIES keys.",
+      "enum": [
+        "general_contractor",
+        "roofing",
+        "hvac",
+        "plumbing",
+        "electrical",
+        "kitchen_bath",
+        "remodeling",
+        "landscaping",
+        "painting",
+        "flooring",
+        "concrete",
+        "siding",
+        "windows_doors",
+        "pool"
+      ]
+    },
+    "city": {"type": ["string", "null"]},
+    "state": {"type": ["string", "null"]},
+    "phone": {"type": ["string", "null"]},
+    "website": {"type": ["string", "null"]},
+    "email": {"type": ["string", "null"], "format": "email"},
+    "contact_name": {"type": ["string", "null"]},
+    "rating": {"type": ["number", "null"], "minimum": 0, "maximum": 5},
+    "review_count": {"type": ["integer", "null"], "minimum": 0},
+    "address": {"type": ["string", "null"]},
+    "fit_score": {"type": ["integer", "null"], "minimum": 0, "maximum": 100},
+    "status": {
+      "type": "string",
+      "enum": ["discovered", "enriched", "qualified", "rejected", "drafted", "sent"]
+    },
+    "rejection_reason": {"type": ["string", "null"]},
+    "draft_id": {"type": ["string", "null"]},
+    "sent_at": {"type": ["string", "null"], "format": "date-time"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}

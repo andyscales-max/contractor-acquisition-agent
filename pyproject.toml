@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "contractor-acquisition-agent"
+version = "0.1.0"
+description = "Discover, qualify, and draft outreach to independent contractor businesses."
+requires-python = ">=3.9"
+dependencies = [
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.2",
+    "jsonschema>=4.21.1",
+    "google-api-python-client>=2.111.0",
+    "google-auth>=2.25.2",
+    "google-auth-oauthlib>=1.2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4.3"]
+
+[project.scripts]
+contractor-agent = "contractor_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+contractor_agent = []

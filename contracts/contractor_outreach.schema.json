@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ContractorOutreachMessage",
+  "description": "Resolved outreach message ready to draft to Gmail.",
+  "type": "object",
+  "required": ["correlation_id", "to_email", "subject", "body", "from_email"],
+  "properties": {
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^lead-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "to_email": {"type": "string", "format": "email"},
+    "from_email": {"type": "string", "format": "email"},
+    "subject": {"type": "string", "minLength": 1, "maxLength": 200},
+    "body": {"type": "string", "minLength": 1},
+    "template_id": {"type": "string"},
+    "placeholders_resolved": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    }
+  }
+}

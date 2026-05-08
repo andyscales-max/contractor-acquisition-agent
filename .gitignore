@@ -1,0 +1,25 @@
+# Secrets — never commit
+.env
+credentials.json
+data/gmail_token.json
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Outputs
+outputs/*.csv
+outputs/*.json
+logs/*.log
