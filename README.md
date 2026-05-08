@@ -12,18 +12,31 @@ The agent **drafts only** — it never sends emails on its own. You review every
 
 ## Quick start (5 minutes)
 
+### macOS / Linux
+
 ```bash
-# 1. Get the code
-git clone <your-repo-url> contractor-acquisition-agent
+git clone https://github.com/andyscales-max/contractor-acquisition-agent.git
 cd contractor-acquisition-agent
-
-# 2. Run setup (creates venv, installs deps, walks you through .env)
 ./setup.sh
-
-# 3. Verify install with the no-keys demo
 source .venv/bin/activate
 contractor-agent demo
 ```
+
+### Windows
+
+You'll use **Git Bash** (which comes free with Git for Windows). PowerShell and CMD aren't supported.
+
+1. Install **Git for Windows**: https://git-scm.com/download/win — accept all defaults during install. Git Bash gets installed automatically.
+2. Install **Python 3.9+**: https://www.python.org/downloads/windows/ — **important: check "Add Python to PATH" on the first install screen.**
+3. Open **Git Bash** (Start Menu → "Git Bash") and run:
+
+   ```bash
+   git clone https://github.com/andyscales-max/contractor-acquisition-agent.git
+   cd contractor-acquisition-agent
+   ./setup.sh
+   source .venv/Scripts/activate
+   contractor-agent demo
+   ```
 
 If `demo` prints three sample emails, your install is healthy. Then proceed to **Real run** below.
 
@@ -55,6 +68,8 @@ You only need this for the `draft` command, not for `discover` / `enrich` / `fil
 ---
 
 ## Real run
+
+> **Windows users**: replace `source .venv/bin/activate` with `source .venv/Scripts/activate` in any command below.
 
 ```bash
 source .venv/bin/activate
@@ -116,7 +131,13 @@ Add more by editing `TRADE_QUERIES` in [`src/contractor_agent/discovery.py`](src
 ## Troubleshooting
 
 **`contractor-agent: command not found`**
-You haven't activated the venv. Run `source .venv/bin/activate` first.
+You haven't activated the venv. Run `source .venv/bin/activate` (Mac/Linux) or `source .venv/Scripts/activate` (Windows Git Bash) first.
+
+**Windows: `./setup.sh` does nothing or "command not found"**
+You're using PowerShell or CMD. Open **Git Bash** instead (it comes with Git for Windows).
+
+**Windows: `python: command not found`**
+You skipped "Add Python to PATH" during install. Reinstall Python and check that box, or add Python's install dir to PATH manually.
 
 **`SERPAPI_KEY is not set`**
 Edit `.env` and add your key. Get one at [serpapi.com](https://serpapi.com).

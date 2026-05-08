@@ -24,14 +24,32 @@ echo "  Contractor Acquisition Agent — Setup"
 echo "================================================================"
 echo
 
+# Detect platform — Windows Git Bash uses .venv/Scripts/, Mac/Linux uses .venv/bin/
+case "$OSTYPE" in
+    msys*|cygwin*|mingw*)
+        VENV_BIN=".venv/Scripts"
+        ACTIVATE_HINT="source .venv/Scripts/activate"
+        IS_WINDOWS=1
+        ;;
+    *)
+        VENV_BIN=".venv/bin"
+        ACTIVATE_HINT="source .venv/bin/activate"
+        IS_WINDOWS=0
+        ;;
+esac
+
 # 1. Python version check
 info "Checking Python version..."
-if ! command -v python3 >/dev/null 2>&1; then
-    fail "python3 not found. Install Python 3.9+ from https://www.python.org/downloads/"
+if command -v python3 >/dev/null 2>&1; then
+    PY_CMD=python3
+elif command -v python >/dev/null 2>&1; then
+    PY_CMD=python
+else
+    fail "Python not found. Install Python 3.9+ from https://www.python.org/downloads/"
 fi
 
-PY_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-PY_OK=$(python3 -c 'import sys; print(1 if sys.version_info >= (3, 9) else 0)')
+PY_VER=$($PY_CMD -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+PY_OK=$($PY_CMD -c 'import sys; print(1 if sys.version_info >= (3, 9) else 0)')
 if [ "$PY_OK" != "1" ]; then
     fail "Python 3.9+ required (you have $PY_VER). Install from https://www.python.org/downloads/"
 fi
@@ -40,7 +58,7 @@ ok "Python $PY_VER"
 # 2. Virtual env
 if [ ! -d ".venv" ]; then
     info "Creating virtual environment..."
-    python3 -m venv .venv
+    $PY_CMD -m venv .venv
     ok "Created .venv/"
 else
     ok ".venv/ already exists"
@@ -48,16 +66,16 @@ fi
 
 # 3. Install package
 info "Installing dependencies (this can take a minute)..."
-.venv/bin/pip install --quiet --upgrade pip setuptools wheel >/dev/null
-.venv/bin/pip install --quiet -e ".[dev]" >/dev/null
+$VENV_BIN/pip install --quiet --upgrade pip setuptools wheel >/dev/null
+$VENV_BIN/pip install --quiet -e ".[dev]" >/dev/null
 ok "Package installed (editable mode)"
 
 # 4. Run tests so user knows install is healthy
 info "Running test suite..."
-if .venv/bin/pytest --quiet >/dev/null 2>&1; then
+if $VENV_BIN/pytest --quiet >/dev/null 2>&1; then
     ok "All tests pass"
 else
-    warn "Some tests failed — try: .venv/bin/pytest"
+    warn "Some tests failed — try: $VENV_BIN/pytest"
 fi
 
 # 5. Configure .env
@@ -129,7 +147,7 @@ ok "Setup complete!"
 echo "================================================================"
 echo
 info "Try a no-keys-needed demo:"
-echo "    source .venv/bin/activate"
+echo "    $ACTIVATE_HINT"
 echo "    contractor-agent demo"
 echo
 info "Real run (needs SerpAPI key):"
